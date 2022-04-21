@@ -1,0 +1,17 @@
+version: '3'
+services:
+  db:
+    image: postgres:latest
+    ports:
+      - "5490:5432"
+    environment:
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_USER=admin
+      - POSTGRES_DB=postgres
+    restart: always             # run as a service
+    volumes:
+      - "db_data:/var/lib/postgresql/data"
+
+volumes:
+  db_data:
+
