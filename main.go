@@ -24,6 +24,7 @@ type User struct {
 }
 
 func InsertUser(u *User, conn *pgx.Conn) {
+	log.Println("inserto usuarios")
 	// Executing SQL query for insertion
 	if _, err := conn.Exec(context.Background(), "INSERT INTO USERS(USERNAME) VALUES($1)", u.UserName); err != nil {
 		// Handling error, if occur
@@ -34,6 +35,7 @@ func InsertUser(u *User, conn *pgx.Conn) {
 }
 
 func GetAllUsers(conn *pgx.Conn) {
+	log.Println("obtengo usuarios")
 	if rows, err := conn.Query(context.Background(), "SELECT * FROM USERS"); err != nil {
 		fmt.Println("Unable to insert due to: ", err)
 		return
@@ -54,6 +56,7 @@ func GetAllUsers(conn *pgx.Conn) {
 }
 
 func GetAnUser(id int, conn *pgx.Conn) {
+	log.Println("obtengo 1 usuario")
 	// variable to store username
 	var username string
 
@@ -67,15 +70,18 @@ func GetAnUser(id int, conn *pgx.Conn) {
 
 // create table initialize
 func CreateTable(conn *pgx.Conn) error {
+	log.Println("creo tabla")
 	query := `
-			CREATE TABLE IF NOT EXISTS USERS(
+			CREATE TABLE IF NOT EXISTS user_4(
 		        ID          SERIAL   PRIMARY KEY,
 		        USERNAME    VARCHAR(20) NOT NULL UNIQUE
 		    );
 			`
-	if _, err := conn.Query(context.Background(), query); err != nil {
+	if rows, err := conn.Query(context.Background(), query); err != nil {
 		log.Fatal(err)
 		return err
+	} else {
+		defer rows.Close()
 	}
 	return nil
 }
@@ -105,18 +111,18 @@ func main() {
 	}
 
 	// defer the close till after the main function has finished
-	// executing
 	defer conn.Close(context.Background())
-	// time execution
-	defer log.Println("Execution time: ", time.Since(time_init))
 
 	//Creating temporary user object.
 	tmpUser := User{
-		UserName: "Ricardo Arturo"}
+		UserName: "UserNameTest"}
 
-	// CreateTable(conn)
-	InsertUser(&tmpUser, conn)
-	GetAnUser(7, conn)
+	CreateTable(conn)
 	GetAllUsers(conn)
+	GetAnUser(5, conn)
+	InsertUser(&tmpUser, conn)
+
+	log.Println("Execution time: ", time.Since(time_init))
+
 
 }

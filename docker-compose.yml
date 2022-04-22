@@ -7,7 +7,7 @@ services:
     environment:
       - POSTGRES_PASSWORD=$Password
       - POSTGRES_USER=$User
-      - POSTGRES_DB=$Db
+      - POSTGRES_DB=$DB
     restart: always             # run as a service
     volumes:
       - "db_data:/var/lib/postgresql/data"
