@@ -56,6 +56,20 @@ func GetAnUser(id int, conn *pgx.Conn) {
 	log.Printf("User with id=%v is %v\n", id, username)
 }
 
+func createTable(conn *pgx.Conn) error {
+	query := `
+			CREATE TABLE IF NOT EXISTS USERS(
+		        ID          SERIAL   PRIMARY KEY,
+		        USERNAME    VARCHAR(20) NOT NULL UNIQUE
+		    );
+			`
+	if _, err := conn.Query(context.Background(), query); err != nil {
+		log.Fatal(err)
+		return err
+	}
+	return nil
+}
+
 func main() {
 	// Open up our database connection.
 	time_init := time.Now()
