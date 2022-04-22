@@ -65,7 +65,8 @@ func GetAnUser(id int, conn *pgx.Conn) {
 	log.Printf("User with id=%v is %v\n", id, username)
 }
 
-func createTable(conn *pgx.Conn) error {
+// create table initialize
+func CreateTable(conn *pgx.Conn) error {
 	query := `
 			CREATE TABLE IF NOT EXISTS USERS(
 		        ID          SERIAL   PRIMARY KEY,
@@ -113,6 +114,7 @@ func main() {
 	tmpUser := User{
 		UserName: "Ricardo Arturo"}
 
+	// CreateTable(conn)
 	InsertUser(&tmpUser, conn)
 	GetAnUser(7, conn)
 	GetAllUsers(conn)

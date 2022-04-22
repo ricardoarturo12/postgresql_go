@@ -23,6 +23,7 @@ go run main.go
 
 ```
 
+    CREATE DATABASE test
 
 ```
 
@@ -30,6 +31,5 @@ go run main.go
 # Docker-compose config
 ```
     docker-compose up
-
 
 ```
