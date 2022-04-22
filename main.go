@@ -4,10 +4,19 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/joho/godotenv"
 )
+
+type Config struct {
+	ServerName string
+	User       string
+	Password   string
+	DB         string
+}
 
 type User struct {
 	ID       int    `json:"id"`
@@ -74,7 +83,21 @@ func main() {
 	// Open up our database connection.
 	time_init := time.Now()
 
-	conn, err := pgx.Connect(context.Background(), "postgres://admin:admin@localhost:5490/test")
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+
+	config := Config{
+		ServerName: os.Getenv("ServerName"),
+		User:       os.Getenv("User"),
+		Password:   os.Getenv("Password"),
+		DB:         os.Getenv("DB"),
+	}
+
+	connectionString := fmt.Sprintf("postgres://%s:%s@%s/%s", config.User, config.Password, config.ServerName, config.DB)
+
+	conn, err := pgx.Connect(context.Background(), connectionString)
 
 	if err != nil {
 		fmt.Println(err)

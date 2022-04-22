@@ -8,16 +8,22 @@ go run main.go
 
 ```
 
+# Example .env Config file
+
+```
+    ServerName=localhost:3306
+    User=user
+    Password=password
+    DB=test
+```
+
 
 
 # Database configuration
 
 ```
 
-    CREATE TABLE IF NOT EXISTS USERS(
-        ID          SERIAL   PRIMARY KEY,
-        USERNAME    VARCHAR(20) NOT NULL UNIQUE
-    );
+
 ```
 
 

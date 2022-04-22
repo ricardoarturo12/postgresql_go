@@ -5,9 +5,9 @@ services:
     ports:
       - "5490:5432"
     environment:
-      - POSTGRES_PASSWORD=admin
-      - POSTGRES_USER=admin
-      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=$Password
+      - POSTGRES_USER=$User
+      - POSTGRES_DB=$Db
     restart: always             # run as a service
     volumes:
       - "db_data:/var/lib/postgresql/data"
