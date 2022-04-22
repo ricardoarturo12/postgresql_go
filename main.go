@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
+	"time"
 
 	"github.com/jackc/pgx/v5"
 )
@@ -19,7 +21,7 @@ func InsertUser(u *User, conn *pgx.Conn) {
 		fmt.Println("Unable to insert due to: ", err)
 		return
 	}
-	fmt.Println("Insertion Succesfull")
+	log.Println("Insertion Succesfull")
 }
 
 func GetAllUsers(conn *pgx.Conn) {
@@ -32,7 +34,7 @@ func GetAllUsers(conn *pgx.Conn) {
 			var u User
 
 			rows.Scan(&u.ID, &u.UserName)
-			fmt.Printf("%+v\n", u)
+			log.Printf("%+v\n", u)
 		}
 		if rows.Err() != nil {
 			// if any error occurred while reading rows.
@@ -51,11 +53,13 @@ func GetAnUser(id int, conn *pgx.Conn) {
 		fmt.Println("Error occur while finding user: ", err)
 		return
 	}
-	fmt.Printf("User with id=%v is %v\n", id, username)
+	log.Printf("User with id=%v is %v\n", id, username)
 }
 
 func main() {
 	// Open up our database connection.
+	time_init := time.Now()
+
 	conn, err := pgx.Connect(context.Background(), "postgres://admin:admin@localhost:5490/test")
 
 	if err != nil {
@@ -65,6 +69,8 @@ func main() {
 	// defer the close till after the main function has finished
 	// executing
 	defer conn.Close(context.Background())
+	// time execution
+	defer log.Println("Execution time: ", time.Since(time_init))
 
 	//Creating temporary user object.
 	tmpUser := User{
